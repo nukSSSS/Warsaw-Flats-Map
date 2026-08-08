@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Warsaw Flats</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="app.css?v=202608082203">
+</head>
+<body data-palette="#2a78d6,#0ca30c,#d03b3b">
+
+<header class="top">
+  <div class="brand">
+    <strong>Warsaw&nbsp;Flats</strong>
+    <span id="count" class="count">загрузка…</span>
+  </div>
+  <div class="top-right">
+    <label class="sort">
+      <span data-i18n="sort">Сортировка</span>
+      <select id="sort">
+        <option value="p" data-i18n="s_p">цена ↑</option>
+        <option value="-p" data-i18n="s_pd">цена ↓</option>
+        <option value="-sc" data-i18n="s_sc">рейтинг ↓</option>
+        <option value="ppm" data-i18n="s_ppm">цена за м² ↑</option>
+        <option value="-a" data-i18n="s_a">площадь ↓</option>
+        <option value="-seen" data-i18n="s_new">новизна</option>
+      </select>
+    </label>
+    <div class="tabs" id="tabs" role="tablist">
+      <button class="tab" id="tab-list" role="tab" aria-selected="true"
+              data-i18n="tab_list">Список</button>
+      <button class="tab" id="tab-map" role="tab" aria-selected="false"
+              data-i18n="tab_map">Карта</button>
+    </div>
+    <button id="flt-toggle" class="ghost" aria-expanded="false"
+            aria-controls="filters">Фильтры</button>
+    <button id="collapse" class="ghost" aria-pressed="false" title="Свернуть список">◧</button>
+    <button id="lang" class="ghost" title="Język / Язык">PL</button>
+    <button id="theme" class="ghost" data-i18n-title="theme_t" title="Светлая / тёмная тема">◐</button>
+  </div>
+</header>
+
+<!-- Фильтры одной полосой над результатами (как было).
+     .flt-head виден только на телефоне — там панель открывается поверх экрана
+     и ей нужна своя кнопка закрытия. -->
+<section class="filters" id="filters">
+  <div class="flt-head">
+    <strong data-i18n="flt">Фильтры</strong>
+    <button id="flt-done" class="ghost" data-i18n="flt_done">Готово</button>
+  </div>
+  <label><span data-i18n="f_price">Цена, тыс.</span> <input type="number" id="f-pmin" data-i18n-ph="from" placeholder="от"><input type="number" id="f-pmax" data-i18n-ph="to" placeholder="до"></label>
+  <label><span data-i18n="f_area">Площадь, м²</span> <input type="number" id="f-amin" data-i18n-ph="from" placeholder="от"><input type="number" id="f-amax" data-i18n-ph="to" placeholder="до"></label>
+  <label><span data-i18n="f_score">Рейтинг</span> <input type="number" id="f-smin" data-i18n-ph="from" placeholder="от" min="0" max="100"><input type="number" id="f-smax" data-i18n-ph="to" placeholder="до" min="0" max="100"></label>
+  <label><span data-i18n="f_commute">Дорога, мин</span> <input type="number" id="f-tmax" data-i18n-ph="to" placeholder="до" min="0" max="120"></label>
+  <label><span data-i18n="f_rooms">Комнаты</span> <span class="chips" id="f-rooms"></span></label>
+  <label class="grow"><span data-i18n="f_district">Район</span> <select id="f-district" multiple size="1"></select></label>
+  <label><span data-i18n="f_year">Год</span> <input type="number" id="f-ymin" data-i18n-ph="from" placeholder="от"><input type="number" id="f-ymax" data-i18n-ph="to" placeholder="до"></label>
+  <label><span data-i18n="f_market">Рынок</span> <span class="chips" id="f-market"></span></label>
+  <label><span data-i18n="f_seller">Продавец</span> <span class="chips" id="f-seller"></span></label>
+  <label><span data-i18n="f_cond">Состояние</span> <span class="chips" id="f-cond"></span></label>
+  <details class="axf" id="f-axes">
+    <summary data-i18n="f_axes">Оси рейтинга</summary>
+    <div class="axf-box"></div>
+  </details>
+  <button id="reset" class="ghost" data-i18n="reset">Сброс</button>
+</section>
+
+<main class="split">
+  <!-- Список результатов -->
+  <section class="list" id="list" aria-label="Список квартир" data-i18n-aria="list_a"></section>
+
+  <!-- Разделитель: тянем — меняется ширина списка -->
+  <div class="gutter" id="gutter" role="separator" aria-orientation="vertical"
+       tabindex="0" title="Потяните, чтобы изменить ширину списка"></div>
+
+  <!-- Карта -->
+  <section class="map-wrap">
+    <div id="map"></div>
+  </section>
+</main>
+
+<!-- Карточка квартиры: выезжает поверх при выборе -->
+<aside class="sheet" id="sheet" hidden>
+  <button class="sheet-close" id="sheet-close" aria-label="Закрыть" data-i18n-aria="close_a">✕</button>
+  <div id="sheet-body"></div>
+</aside>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js?v=202608082203" type="module"></script>
+</body>
+</html>
